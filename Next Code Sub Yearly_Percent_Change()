@@ -1,0 +1,39 @@
+Sub Yearly_Percent_Change()
+
+For Each WS In Worksheets
+
+Dim Row_n As Integer
+
+Cells(1, "L").Value = "Yearly Change"
+Cells(1, "M").Value = "Percent Change"
+
+Last_Row = Cells(Rows.Count, 9).End(xlUp).Row
+'MsgBox Rows.Count & " : " & Last_Row
+
+For Row_n = 2 To Last_Row
+
+    'Subtract Close Price from Open Price
+    Cells(Row_n, "L") = Cells(Row_n, "K") - Cells(Row_n, "J").Value
+    
+    'Find Percent Change
+    Cells(Row_n, "M") = ((Cells(Row_n, "K") - Cells(Row_n, "J").Value)) / Cells(Row_n, "J").Value
+    ' [Resource] https://stackoverflow.com/questions/42844778/vba-for-each-cell-in-range-format-as-percentage
+    Cells(Row_n, "M").NumberFormat = "0.00%"
+    
+    'Conditional Formating for Price Change
+    If Cells(Row_n, "L") < 0 Then
+        Cells(Row_n, "L").Interior.ColorIndex = 3
+        ElseIf Cells(Row_n, "L") > 0 Then
+        Cells(Row_n, "L").Interior.ColorIndex = 4
+    End If
+
+  'Conditional Formating for Price Change
+   If Cells(Row_n, "M") < 0 Then
+        Cells(Row_n, "M").Interior.ColorIndex = 3
+        ElseIf Cells(Row_n, "M") > 0 Then
+        Cells(Row_n, "M").Interior.ColorIndex = 4
+    End If
+
+Next Row_n
+Next WS
+End Sub
