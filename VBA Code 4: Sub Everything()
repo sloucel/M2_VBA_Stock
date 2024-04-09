@@ -1,0 +1,8 @@
+Sub Everything()
+' [Source] https://stackoverflow.com/questions/21254885/running-at-once-multiple-subs-from-an-unique-vba-sub
+' Run all subs at once
+Call StockAnalysis
+Call Yearly_Percent_Change
+Call Min_Max
+
+End Sub
