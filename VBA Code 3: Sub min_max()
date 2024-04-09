@@ -1,0 +1,57 @@
+Sub Min_Max()
+
+For Each WS In Worksheets
+
+Dim Percent_Rng As Range
+Dim Last_Row As Long
+Dim Max As Single
+Dim Min As Single
+Dim Max_Total As Double
+Dim Row_n As Integer
+Dim Ticker As String
+
+Last_Row = Cells(Rows.Count, 9).End(xlUp).Row
+
+Cells(2, "P").Value = "Greatest % Increase"
+Cells(3, "P").Value = "Greatest % Decrease"
+Cells(4, "P").Value = "Greatest Total Volume"
+Cells(1, "Q").Value = "Ticker"
+Cells(1, "R").Value = "Value"
+
+' [Source] https://www.youtube.com/watch?v=o2gHMOTNyB4
+   ' Get MAX Percent Change
+    Set Percent_Rng = Range("M2:M" & Last_Row)
+    Max = Application.WorksheetFunction.Max(Percent_Rng)
+    Cells(2, "R").Value = Max
+    Cells(2, "R").NumberFormat = "0.00%"
+    'MsgBox Max
+    
+    ' Get MIN Percent Change
+    Set Percent_Rng = Range("M2:M" & Last_Row)
+    Min = Application.WorksheetFunction.Min(Percent_Rng)
+    Cells(3, "R").Value = Min
+    Cells(3, "R").NumberFormat = "0.00%"
+    'MsgBox Min
+    
+    ' Get MAX Total Volume
+    Set Percent_Rng2 = Range("N2:N" & Last_Row)
+    Max_Total = Application.WorksheetFunction.Max(Percent_Rng2)
+    Cells(4, "R").Value = Max_Total
+    'MsgBox Max_Total
+    
+For Row_n = 2 To Last_Row
+    If (Cells(Row_n, "M").Value = Max) Then
+        Cells(2, "Q").Value = Cells(Row_n, "I").Value
+    End If
+
+    If (Cells(Row_n, "M").Value = Min) Then
+        Cells(3, "Q").Value = Cells(Row_n, "I").Value
+    End If
+
+    If (Cells(Row_n, "N").Value = Max_Total) Then
+        Cells(4, "Q").Value = Cells(Row_n, "I").Value
+    End If
+    
+Next Row_n
+Next WS
+End Sub
