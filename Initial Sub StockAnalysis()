@@ -1,0 +1,77 @@
+Sub StockAnalysis()
+
+For Each WS In Worksheets
+
+Dim Ticker_Symbol As String
+Dim Stock_Volume As Double
+Dim Open_Price As Single
+Dim Close_Price As Single
+Dim Stock_Table_Row As Integer
+Dim Last_Row As Long
+Dim Open_Date_Captured As Boolean
+Dim Set_Open_Price As Single
+Dim Close_Price_Captured As Boolean
+Dim Set_Close_Price As Single
+
+Stock_Volume = 0
+Stock_Table_Row = 2
+Cells(1, 9).Value = "Ticker Symbol"
+Cells(1, 10).Value = "Open Price"
+Cells(1, 11).Value = "Closed Price"
+Cells(1, 12).Value = "Yearly Change"
+Cells(1, 13).Value = "Percent Change"
+Cells(1, 14).Value = "Total  Stock Volume"
+
+Last_Row = Cells(Rows.Count, 1).End(xlUp).Row
+'MsgBox Rows.Count & " : " & Last_Row
+
+For Row_n = 2 To Last_Row
+    If Open_Date_Captured = False Then
+    ' Set Open Price
+    Set_Open_Price = Cells(Row_n, 3).Value
+    Open_Date_Captured = True
+    
+    End If
+    
+    If Close_Price_Captured = False Then
+    ' Set Closed Price
+    Set_Close_Price = Cells(Row_n, 6).Value
+
+    End If
+    ' [Source] Learned from VBA Class_3_Activities_CreditCard-CellComparison
+    ' Check if we are still within the same Ticker Symbol, if it is not...
+        If Cells(Row_n + 1, 1).Value <> Cells(Row_n, 1).Value Then
+        ' Set the Ticker Symbol
+            Ticker_Symbol = Cells(Row_n, "A").Value
+        ' Add total Stock Volume
+            Stock_Volume = Stock_Volume + Cells(Row_n, "G").Value
+        ' Add Ticker Symbol to Stock Table
+            Range("I" & Stock_Table_Row).Value = Ticker_Symbol
+        ' Add Stock Volume to Stock Table
+            Range("N" & Stock_Table_Row).Value = Stock_Volume
+            
+        ' [Source] https://stackoverflow.com/questions/59461571/how-do-i-keep-initial-value-in-a-for-loop
+        ' (O) Add Open Price Date
+            Range("J" & Stock_Table_Row).Value = Set_Open_Price
+        ' (C) Add Closed Price Date
+            Range("K" & Stock_Table_Row).Value = Set_Close_Price
+            
+        ' Add one to the summary table
+            Stock_Table_Row = Stock_Table_Row + 1
+        ' Reset the Stock Volume
+            Stock_Volume = 0
+        
+         ' [Source] https://stackoverflow.com/questions/59461571/how-do-i-keep-initial-value-in-a-for-loop
+        '(O)Reset Open Date Captured
+            Open_Date_Captured = False
+        '(C)Reset Close Date Captured
+            Close_Date_Captured = False
+            
+    ' If not the same, execute the code above
+        Else
+            Stock_Volume = Stock_Volume + Cells(Row_n, 7).Value
+            
+        End If
+    Next Row_n
+Next WS
+End Sub
